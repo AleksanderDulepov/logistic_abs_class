@@ -32,33 +32,24 @@ class Store(Storage):
             self._items[mark] = current_qnt + quantity
             self._capacity -= quantity
         else:
-
             print(f"Требуется поместить на склад {quantity} единиц товара {mark}. На складе есть место только под " \
                   f"{self._capacity} единиц. Остаток, не размещенный на складе составляет "
                   f"{quantity - self._capacity} единиц.")
             self.add(mark, self._capacity)
 
-    def remove(self, mark, quantity) -> dict:
+    def remove(self, mark, quantity):
+        current_qnt = self.get_item_value(mark, quantity)
+        self._items[mark] = self._items.get(mark) - current_qnt
+        self._capacity += current_qnt
+
+    def get_item_value(self, mark, quantity):
         current_qnt = self._items.get(mark, None)
-
         if current_qnt is None:
-            action = f"Товара {mark} вообще никогда не было на складе."
-            return {"message": action, "are_we_cont": False}
-
+            return None
         if current_qnt < quantity:
-            self._items[mark] = 0
-            self._capacity += current_qnt
-            action = f"Товара {mark} на складе {self._name} всего {current_qnt} из запрашиваемых {quantity} ед.\nCо " \
-                     f"склада" \
-                     f" {self._name} " \
-                     f"было изъято {current_qnt} единиц товара {mark}."
-            return {"message": action, "are_we_cont": True, "transfered_count":current_qnt}
+            return current_qnt
         else:
-            self._items[mark] = current_qnt - quantity
-            self._capacity += quantity
-            action = f"Товар в полном обьеме ({quantity} шт.) есть на складе {self._name}.\nCо " \
-                     f"склада {self._name} было изъято {quantity} единиц товара {mark}."
-            return {"message": action, "are_we_cont": True,"transfered_count":quantity}
+            return quantity
 
     def get_free_space(self):
         return self._capacity

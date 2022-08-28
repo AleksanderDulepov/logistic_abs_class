@@ -6,16 +6,14 @@ class Shop(Storage):
     CAPACITY_MAY_BE = 20
     MAX_KIND_OF_ITEMS = 5
 
-
-    def __init__(self,name:str,dict={}):
-        self._name=name
+    def __init__(self, name: str, dict={}):
+        self._name = name
         self._items = dict
 
-
-        if self._define_capacity()<0:
+        if self._define_capacity() < 0:
             raise Over_capacity_exception
         else:
-            self._capacity=self._define_capacity()
+            self._capacity = self._define_capacity()
 
     @property
     def name(self):
@@ -30,8 +28,8 @@ class Shop(Storage):
         return self._capacity
 
     def add(self, mark, quantity):
-        amount=self.get_free_space_for_item(mark, quantity)
-        current_qnt = self._items.get(mark)
+        amount = self.get_free_space_for_item(mark, quantity)
+        current_qnt = self._items.get(mark,0)
         self._items[mark] = current_qnt + amount
         self._capacity -= amount
 
