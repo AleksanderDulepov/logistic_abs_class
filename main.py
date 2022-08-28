@@ -67,10 +67,6 @@ print(f"Курьер везет {remove_result} {order.product} из {order.wher
 
 # приходывание
 order.to.add(order.product, remove_result)
-
-
-
-
 print(f"Курьер доставил {remove_result} {order.product} в {order.to.name}.")
 print(f"После перемещения в магазине {order.to.name} хранятся следующие товары:")
 for product, amount in order.to.items.items():
