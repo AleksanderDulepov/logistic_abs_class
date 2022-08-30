@@ -1,5 +1,5 @@
-from Shop_class import Shop
-from Store_class import Store
+from ShopClass import Shop
+from StoreClass import Store
 
 class Request():
 

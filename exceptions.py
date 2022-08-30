@@ -1,9 +1,10 @@
-class Wrong_input_exception(BaseException):
+class Wrong_input_exception(Exception):
     pass
 
 
-class Not_int_exception(BaseException):
+class Not_int_exception(Exception):
     pass
 
-class Over_capacity_exception(BaseException):
+
+class Over_capacity_exception(Exception):
     pass

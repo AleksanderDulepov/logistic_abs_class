@@ -1,13 +1,16 @@
-from Request_class import Request
+from RequestClass import Request
+from ShopClass import Shop
+from StoreClass import Store
 from exceptions import Wrong_input_exception, Not_int_exception
 
-desc="Ожидаемый формат ввода: Доставить 1 холодильник из ozon_store в ali_tmall"
+desc = "Ожидаемый формат ввода: Доставить 1 холодильник из ozon_store в ali_tmall"
 
-def input_cycle(stores_dict,shops_dict):
+
+def input_cycle(stores_list: list[Store], shops_list: list[Shop]):
     while True:
         try:
             order_input = input("Введите действие для выполнения:\n")
-            order = Request(stores_dict, shops_dict, order_input)
+            order = Request(stores_list, shops_list, order_input)
         except Wrong_input_exception:
             print("Команда не может быть исполнена, формат введенной команды не соответствует")
             print(desc)

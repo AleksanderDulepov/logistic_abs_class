@@ -1,10 +1,9 @@
-from Storage_abs_class import Storage
+from StorageAbcClass import Storage
 from exceptions import Over_capacity_exception
 
 
-class Shop(Storage):
-    CAPACITY_MAY_BE = 20
-    MAX_KIND_OF_ITEMS = 5
+class Store(Storage):
+    CAPACITY_MAY_BE = 100
 
     def __init__(self, name: str, dict={}):
         self._name = name
@@ -28,35 +27,30 @@ class Shop(Storage):
         return self._capacity
 
     def add(self, mark, quantity):
-        amount = self.get_free_space_for_item(mark, quantity)
-        current_qnt = self._items.get(mark,0)
+        amount = self.get_free_space_for_item(quantity)
+        current_qnt = self._items.get(mark, 0)
         self._items[mark] = current_qnt + amount
         self._capacity -= amount
 
     def remove(self, mark, quantity):
+        current_qnt = self.get_item_value(mark, quantity)
+        self._items[mark] = self._items.get(mark) - current_qnt
+        self._capacity += current_qnt
+
+    def get_item_value(self, mark, quantity):
         current_qnt = self._items.get(mark, None)
-
         if current_qnt is None:
-            return f"Товара {mark} вообще никогда не было в магазине"
-
+            return None
         if current_qnt < quantity:
-            self._items[mark] = 0
-            self._capacity += current_qnt
-            return f"Товара {mark} в магазине всего {current_qnt} из {quantity}. Будет изьят весь имеющийся товар" \
-                   f" {mark}."
+            return current_qnt
         else:
-            self._items[mark] = current_qnt - quantity
-            self._capacity += quantity
-            return f"Из магазина было изьято {quantity} единиц товара {mark}."
+            return quantity
 
-    def get_free_space_for_item(self, mark, quantity):
-        if self.get_unique_items_count() < 5:
-            if self._capacity >= quantity:
-                return quantity
-            elif self._capacity > 0:
-                return self._capacity
-            else:
-                return None
+    def get_free_space_for_item(self, quantity):
+        if self._capacity >= quantity:
+            return quantity
+        elif self._capacity > 0:
+            return self._capacity
         else:
             return None
 

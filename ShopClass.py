@@ -1,9 +1,10 @@
-from Storage_abs_class import Storage
+from StorageAbcClass import Storage
 from exceptions import Over_capacity_exception
 
 
-class Store(Storage):
-    CAPACITY_MAY_BE = 100
+class Shop(Storage):
+    CAPACITY_MAY_BE = 20
+    MAX_KIND_OF_ITEMS = 5
 
     def __init__(self, name: str, dict={}):
         self._name = name
@@ -27,15 +28,10 @@ class Store(Storage):
         return self._capacity
 
     def add(self, mark, quantity):
-        if self._capacity >= quantity:
-            current_qnt = self._items.get(mark, 0)
-            self._items[mark] = current_qnt + quantity
-            self._capacity -= quantity
-        else:
-            print(f"Требуется поместить на склад {quantity} единиц товара {mark}. На складе есть место только под " \
-                  f"{self._capacity} единиц. Остаток, не размещенный на складе составляет "
-                  f"{quantity - self._capacity} единиц.")
-            self.add(mark, self._capacity)
+        amount = self.get_free_space_for_item(quantity)
+        current_qnt = self._items.get(mark, 0)
+        self._items[mark] = current_qnt + amount
+        self._capacity -= amount
 
     def remove(self, mark, quantity):
         current_qnt = self.get_item_value(mark, quantity)
@@ -50,6 +46,17 @@ class Store(Storage):
             return current_qnt
         else:
             return quantity
+
+    def get_free_space_for_item(self, quantity):
+        if self.get_unique_items_count() < 5:
+            if self._capacity >= quantity:
+                return quantity
+            elif self._capacity > 0:
+                return self._capacity
+            else:
+                return None
+        else:
+            return None
 
     def get_free_space(self):
         return self._capacity
